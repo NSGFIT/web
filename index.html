@@ -82,16 +82,26 @@
     </div>
 
     <script>
-        document.getElementById('trainingForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            let formData = new FormData(this);
-            fetch('https://script.google.com/macros/s/AKfycbxghya5fU3DpBmet4YShik2bIPBFGWS5qRzQ6pIkKpE7zDnzY0gsvIubq84JcCaJUIvFw/exec', {
-                method: 'POST',
-                body: formData
-            }).then(response => response.text())
-              .then(data => alert('Submitted Successfully!'))
-              .catch(error => console.error('Error:', error));
-        });
+       document.getElementById('trainingForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    let formData = {
+        name: document.querySelector("[name='name']").value,
+        email: document.querySelector("[name='email']").value,
+        phone: document.querySelector("[name='phone']").value,
+        dob: document.querySelector("[name='dob']").value,
+        weight: document.querySelector("[name='weight']").value,
+        height: document.querySelector("[name='height']").value,
+        training: document.querySelector("[name='training']").value
+    };
+    
+    fetch('https://script.google.com/macros/s/AKfycbxghya5fU3DpBmet4YShik2bIPBFGWS5qRzQ6pIkKpE7zDnzY0gsvIubq84JcCaJUIvFw/exec', {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+    }).then(response => response.text())
+      .then(data => alert('Submitted Successfully!'))
+      .catch(error => console.error('Error:', error));
+});
     </script>
 </body>
 </html>

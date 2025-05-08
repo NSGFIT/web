@@ -82,7 +82,7 @@
     </div>
 
     <script>
-       document.getElementById('trainingForm').addEventListener('submit', function(event) {
+document.getElementById('trainingForm').addEventListener('submit', function(event) {
     event.preventDefault();
     let formData = {
         name: document.querySelector("[name='name']").value,
@@ -94,7 +94,7 @@
         training: document.querySelector("[name='training']").value
     };
     
-    fetch('https://script.google.com/macros/s/AKfycbxghya5fU3DpBmet4YShik2bIPBFGWS5qRzQ6pIkKpE7zDnzY0gsvIubq84JcCaJUIvFw/exec?name=Test&email=test@example.com&phone=1234567890&dob=2000-01-01&weight=70&height=175&training=Strength', {
+    fetch('https://script.google.com/macros/s/AKfycbxghya5fU3DpBmet4YShik2bIPBFGWS5qRzQ6pIkKpE7zDnzY0gsvIubq84JcCaJUIvFw/exec', {
         method: 'POST',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)

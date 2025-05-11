@@ -4,46 +4,41 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Submit Name</title>
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <style>
-    .form-container {
-      max-width: 400px;
-      margin: 50px auto;
-      padding: 20px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-  </style>
 </head>
-<body class="bg-light">
-  <div class="form-container">
-    <h4 class="text-center mb-3">Enter Your Name</h4>
-    <form id="submit-form">
-      <div class="form-group">
-        <input type="text" name="name" class="form-control" placeholder="Your Name" required />
-      </div>
-      <button type="submit" class="btn btn-primary btn-block">Submit</button>
-    </form>
-  </div>
+<body>
+  <h2>Submit Your Name</h2>
+  <form id="form">
+    <label for="name">Name:</label>
+    <input type="text" name="name" id="name" required />
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="response"></p>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbwsxNHtCHLyuZdAhtY0dIKqEiN7kUSrS_KvPd3Ck36nEYqivDFEa7oRFItDggn7Usgh/exec";
-    const form = document.getElementById("submit-form");
+    const form = document.getElementById("form");
+    const response = document.getElementById("response");
 
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", function (e) {
       e.preventDefault();
       const formData = new FormData(form);
 
-      fetch(scriptURL, { method: "POST", body: formData })
-        .then(response => {
-          Swal.fire("Success", "Name submitted successfully!", "success");
-          form.reset();
+      fetch("https://script.google.com/macros/s/AKfycbwsxNHtCHLyuZdAhtY0dIKqEiN7kUSrS_KvPd3Ck36nEYqivDFEa7oRFItDggn7Usgh/exec", {
+        method: "POST",
+        body: formData
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.result === "success") {
+            response.textContent = "Name submitted successfully!";
+            form.reset();
+          } else {
+            response.textContent = "There was a problem submitting your name.";
+          }
         })
         .catch(error => {
-          Swal.fire("Error", "There was a problem submitting your name.", "error");
-          console.error("Error!", error.message);
+          response.textContent = "Error: " + error.message;
+          console.error("Submission error:", error);
         });
     });
   </script>

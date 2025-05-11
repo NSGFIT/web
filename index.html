@@ -1,22 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Submit Name</title>
 </head>
 <body>
   <h2>Submit Your Name</h2>
-  <form id="form">
-    <label for="name">Name:</label>
-    <input type="text" name="name" id="name" required />
+  <form id="name-form">
+    <input type="text" name="name" placeholder="Enter your name" required />
     <button type="submit">Submit</button>
   </form>
-
   <p id="response"></p>
 
   <script>
-    const form = document.getElementById("form");
+    const form = document.getElementById("name-form");
     const response = document.getElementById("response");
 
     form.addEventListener("submit", function (e) {
@@ -25,20 +21,19 @@
 
       fetch("https://script.google.com/macros/s/AKfycbwsxNHtCHLyuZdAhtY0dIKqEiN7kUSrS_KvPd3Ck36nEYqivDFEa7oRFItDggn7Usgh/exec", {
         method: "POST",
-        body: formData
+        body: formData,
       })
-        .then(res => res.json())
-        .then(data => {
+        .then((res) => res.json())
+        .then((data) => {
           if (data.result === "success") {
-            response.textContent = "Name submitted successfully!";
+            response.textContent = "Successfully submitted!";
             form.reset();
           } else {
-            response.textContent = "There was a problem submitting your name.";
+            response.textContent = "Error: " + data.message;
           }
         })
-        .catch(error => {
-          response.textContent = "Error: " + error.message;
-          console.error("Submission error:", error);
+        .catch((err) => {
+          response.textContent = "Network error: " + err.message;
         });
     });
   </script>

@@ -84,32 +84,31 @@
         </div>
     </section>
 
-
-
     <!-- Contact Section -->
     <section id="contact" class="py-20 bg-gray-900 contact-bg">
         <div class="container mx-auto px-6">
             <h2 class="text-4xl font-bold text-center mb-12">Get In Touch</h2>
             <div class="max-w-lg mx-auto">
-                <div>
+                <form id="contact-form">
                     <div class="mb-4">
                         <label for="name" class="block text-sm font-medium mb-1">Name</label>
-                        <input type="text" id="name" class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Your Name">
+                        <input type="text" id="name" name="name" class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Your Name" required>
                     </div>
                     <div class="mb-4">
                         <label for="email" class="block text-sm font-medium mb-1">Email</label>
-                        <input type="email" id="email" class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Your Email">
+                        <input type="email" id="email" name="email" class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Your Email" required>
                     </div>
                     <div class="mb-4">
                         <label for="phone" class="block text-sm font-medium mb-1">Phone Number</label>
-                        <input type="tel" id="phone" class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Your Phone Number">
+                        <input type="tel" id="phone" name="phone" class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Your Phone Number" required>
                     </div>
                     <div class="mb-4">
                         <label for="message" class="block text-sm font-medium mb-1">Message</label>
-                        <textarea id="message" class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500" rows="5" placeholder="Your Message"></textarea>
+                        <textarea id="message" name="message" class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500" rows="5" placeholder="Your Message" required></textarea>
                     </div>
-                    <button class="w-full bg-red-600 text-white px-6 py-3 rounded-lg font-semibold cta-button transition-transform">Send Message</button>
-                </div>
+                    <div id="form-message" class="mb-4 text-center hidden"></div>
+                    <button type="submit" class="w-full bg-red-600 text-white px-6 py-3 rounded-lg font-semibold cta-button transition-transform">Send Message</button>
+                </form>
             </div>
         </div>
     </section>

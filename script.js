@@ -17,7 +17,7 @@ document.getElementById('contact-form').addEventListener('submit', async functio
     messageDiv.textContent = 'Submitting...';
 
     try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbxPki13HvK3HpMAkRbi6uEDTgwfCkLfRe9GRdxo1ihZ6m5vQbtDDXDFHzkJzGq-Y7reQg/exec', {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbzcrBnRXWZxXAbAEuozeB_pY6wXVaFp0f_w37Cn9MzYbyXuI9p7hN5K03V51AKlZjIk/exec', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'

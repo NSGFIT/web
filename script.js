@@ -1,109 +1,200 @@
-// Contact Form Submission (Unchanged)
-document.getElementById('contact-form')?.addEventListener('submit', async function(event) {
-    event.preventDefault(); // Prevent default form submission
+document.addEventListener('DOMContentLoaded', () => {
+    const contactForm = document.getElementById('contact-form');
+    const bookingForm = document.getElementById('booking-form');
+    const questionForm = document.getElementById('question-form');
+    const contactSubmit = document.getElementById('contact-submit');
+    const contactSpinner = document.getElementById('contact-spinner');
+    const contactButtonText = document.getElementById('contact-button-text');
+    const bookingButton = bookingForm?.querySelector('button[type="submit"]');
+    const bookingSpinner = document.getElementById('spinner');
+    const bookingButtonText = document.getElementById('button-text');
+    const questionSpinner = document.getElementById('question-spinner');
+    const questionButtonText = document.getElementById('question-button-text');
 
-    // Get form data
-    const form = event.target;
-    const formData = new FormData(form);
-    const data = {
-        formType: 'contact',
-        name: formData.get('name'),
-        email: formData.get('email'),
-        phone: formData.get('phone'),
-        message: formData.get('message')
+    // Replace with your Google Apps Script Web App URL
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyjCt9mfh-X3LRiwgpNUnrUTIUNZ6D-DGyhkOnyjHc8R9neeW8wkQsQKmxO5HQFkreqAw/exec';
+
+    // Close Modal Function
+    window.closeModal = function(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.style.display = 'none';
+        // Clear animation containers
+        ['fireworks-container', 'confetti-container', 'starburst-container'].forEach(id => {
+            const container = document.getElementById(id);
+            if (container) container.innerHTML = '';
+        });
     };
 
-    // Get UI elements
-    const messageDiv = document.getElementById('form-message');
-    messageDiv.classList.remove('hidden', 'text-green-500', 'text-red-500');
-    messageDiv.textContent = 'Submitting...';
-
-    try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbzhlNPUPQdPTm4vf4yoAbncdWZ8D7bOgAAtveuELE-9FBeDJKdABPVITm60q-ppVwYi/exec', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams(data).toString(),
-            redirect: 'follow'
-        });
-
-        const result = await response.text();
-        if (result === 'Data Saved Successfully') {
-            messageDiv.textContent = 'Thank you! Your message has been sent.';
-            messageDiv.classList.add('text-green-500');
-            form.reset(); // Clear the form
-        } else {
-            messageDiv.textContent = result || 'Error: Could not send message.';
-            messageDiv.classList.add('text-red-500');
+    // Fireworks Animation (Contact Form)
+    function createFireworks() {
+        const container = document.getElementById('fireworks-container');
+        container.style.display = 'block';
+        for (let i = 0; i < 30; i++) {
+            const firework = document.createElement('div');
+            firework.className = 'firework';
+            firework.style.left = Math.random() * 100 + 'vw';
+            firework.style.top = Math.random() * 100 + 'vh';
+            firework.style.animationDelay = Math.random() * 0.5 + 's';
+            container.appendChild(firework);
         }
-    } catch (error) {
-        messageDiv.textContent = 'Error: Could not connect to the server.';
-        messageDiv.classList.add('text-red-500');
+        setTimeout(() => {
+            container.style.display = 'none';
+            container.innerHTML = '';
+        }, 2000);
+    }
+
+    // Confetti Animation (Booking Form)
+    function createConfetti() {
+        const container = document.getElementById('confetti-container');
+        container.style.display = 'block';
+        for (let i = 0; i < 50; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.animationDelay = Math.random() * 2 + 's';
+            confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+            container.appendChild(confetti);
+        }
+        setTimeout(() => {
+            container.style.display = 'none';
+            container.innerHTML = '';
+        }, 3000);
+    }
+
+    // Starburst Animation (Question Form)
+    function createStarbursts() {
+        const container = document.getElementById('starburst-container');
+        container.style.display = 'block';
+        for (let i = 0; i < 15; i++) {
+            const starburst = document.createElement('div');
+            starburst.className = 'starburst';
+            starburst.style.left = Math.random() * 100 + 'vw';
+            starburst.style.top = Math.random() * 100 + 'vh';
+            starburst.style.animationDelay = Math.random() * 0.4 + 's';
+            starburst.style.transform = `rotate(${Math.random() * 360}deg)`;
+            container.appendChild(starburst);
+        }
+        setTimeout(() => {
+            container.style.display = 'none';
+            container.innerHTML = '';
+        }, 1600);
+    }
+
+    // Contact Form Submission
+    if (contactForm) {
+        contactForm.addEventListener('submit', e => {
+            e.preventDefault();
+            contactSpinner.classList.remove('hidden');
+            contactButtonText.textContent = 'Sending...';
+            contactSubmit.disabled = true;
+
+            const formData = new FormData(contactForm);
+            formData.append('formType', 'contact');
+
+            fetch(scriptURL, { method: 'POST', body: formData })
+                .then(response => response.json())
+                .then(data => {
+                    contactSpinner.classList.add('hidden');
+                    contactButtonText.textContent = 'Send Message';
+                    contactSubmit.disabled = false;
+
+                    if (data.result === 'success') {
+                        document.getElementById('contact-modal').style.display = 'flex';
+                        createFireworks();
+                        contactForm.reset();
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    contactSpinner.classList.add('hidden');
+                    contactButtonText.textContent = 'Send Message';
+                    contactSubmit.disabled = false;
+                    alert('Error: ' + error.message);
+                });
+        });
+    }
+
+    // Booking Form Submission
+    if (bookingForm) {
+        bookingForm.addEventListener('submit', e => {
+            e.preventDefault();
+
+            const lastBookingTime = localStorage.getItem('lastBookingTime');
+            const now = new Date().getTime();
+            const oneDay = 24 * 60 * 60 * 1000;
+
+            if (lastBookingTime && (now - lastBookingTime) < oneDay) {
+                const nextBookingTime = new Date(parseInt(lastBookingTime) + oneDay);
+                document.getElementById('repeat-booking-time').textContent = nextBookingTime.toLocaleString();
+                document.getElementById('repeat-booking-modal').style.display = 'flex';
+                return;
+            }
+
+            bookingSpinner.classList.remove('hidden');
+            bookingButtonText.textContent = 'Submitting...';
+            bookingButton.disabled = true;
+
+            const formData = new FormData(bookingForm);
+            formData.append('formType', 'booking');
+
+            fetch(scriptURL, { method: 'POST', body: formData })
+                .then(response => response.json())
+                .then(data => {
+                    bookingSpinner.classList.add('hidden');
+                    bookingButtonText.textContent = 'Submit Booking';
+                    bookingButton.disabled = false;
+
+                    if (data.result === 'success') {
+                        localStorage.setItem('lastBookingTime', now);
+                        document.getElementById('booking-success-modal').style.display = 'flex';
+                        createConfetti();
+                        bookingForm.reset();
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    bookingSpinner.classList.add('hidden');
+                    bookingButtonText.textContent = 'Submit Booking';
+                    bookingButton.disabled = false;
+                    alert('Error: ' + error.message);
+                });
+        });
+    }
+
+    // Question Form Submission
+    if (questionForm) {
+        questionForm.addEventListener('submit', e => {
+            e.preventDefault();
+            questionSpinner.classList.remove('hidden');
+            questionButtonText.textContent = 'Submitting...';
+            questionForm.querySelector('button[type="submit"]').disabled = true;
+
+            const formData = new FormData(questionForm);
+            formData.append('formType', 'question');
+
+            fetch(scriptURL, { method: 'POST', body: formData })
+                .then(response => response.json())
+                .then(data => {
+                    questionSpinner.classList.add('hidden');
+                    questionButtonText.textContent = 'Submit Question';
+                    questionForm.querySelector('button[type="submit"]').disabled = false;
+
+                    if (data.result === 'success') {
+                        document.getElementById('question-modal').style.display = 'flex';
+                        createStarbursts();
+                        questionForm.reset();
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    questionSpinner.classList.add('hidden');
+                    questionButtonText.textContent = 'Submit Question';
+                    questionForm.querySelector('button[type="submit"]').disabled = false;
+                    alert('Error: ' + error.message);
+                });
+        });
     }
 });
-
-// Newsletter Form Submission
-document.getElementById('newsletter-form')?.addEventListener('submit', async function(event) {
-    event.preventDefault(); // Prevent default form submission
-
-    // Get form data
-    const form = event.target;
-    const formData = new FormData(form);
-    const data = {
-        formType: 'newsletter',
-        email: formData.get('email')
-    };
-
-    // Get UI elements
-    const messageDiv = document.getElementById('newsletter-message');
-    messageDiv.classList.remove('hidden', 'text-green-500', 'text-red-500');
-    messageDiv.textContent = 'Subscribing...';
-
-    try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbzhlNPUPQdPTm4vf4yoAbncdWZ8D7bOgAAtveuELE-9FBeDJKdABPVITm60q-ppVwYi/exec', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams(data).toString(),
-            redirect: 'follow'
-        });
-
-        const result = await response.json();
-        if (result.result === 'success') {
-            messageDiv.textContent = 'Thank you for subscribing!';
-            messageDiv.classList.add('text-green-500');
-            form.reset(); // Clear the form
-            triggerConfetti(); // Show confetti animation
-        } else {
-            messageDiv.textContent = result.message || 'Error: Could not subscribe.';
-            messageDiv.classList.add('text-red-500');
-        }
-    } catch (error) {
-        messageDiv.textContent = 'Error: Could not connect to the server.';
-        messageDiv.classList.add('text-red-500');
-        console.error('Error:', error);
-    }
-});
-
-// Confetti Animation Function
-function triggerConfetti() {
-    const confettiContainer = document.getElementById('confetti-container');
-    confettiContainer.style.display = 'block';
-
-    // Create 50 confetti pieces
-    for (let i = 0; i < 50; i++) {
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti';
-        confetti.style.left = `${Math.random() * 100}vw`;
-        confetti.style.animationDelay = `${Math.random() * 2}s`;
-        confettiContainer.appendChild(confetti);
-    }
-
-    // Clear confetti after animation
-    setTimeout(() => {
-        confettiContainer.style.display = 'none';
-        confettiContainer.innerHTML = '';
-    }, 3000);
-}
